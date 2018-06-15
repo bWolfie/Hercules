@@ -18020,6 +18020,234 @@ BUILDIN(checkidle) {
 	return true;
 }
 
+/*===============================================
+ * read_player_data(<type>{, <Account ID})
+ * Reads player data and returns its value. [Wolfie]
+ *==============================================*/
+BUILDIN(read_player_data)
+{
+	int type = script_getnum(st, 2);
+	struct map_session_data *sd = (script_hasdata(st, 3)) ? map->id2sd(script_getnum(st, 3)) : script->rid2sd(st);
+
+	/* Type check */
+	if (type < PDT_STORAGEFLAG || type >= PDT_MAX) {
+		ShowError("buildin_read_player_data: Invalid player data type %d provided.\n", type);
+		script_pushint(st, 0);
+		return false;
+	}
+
+	if (sd == NULL)
+		return true;
+
+	switch (type) {
+	case PDT_STORAGEFLAG:
+		script_pushint(st, sd->state.storage_flag);
+		return true;
+	case PDT_SHOWDELAY:
+		script_pushint(st, sd->state.showdelay;
+		return true;
+	case PDT_SHOWEXP:
+		script_pushint(st, sd->state.showexp);
+		return true;
+	case PDT_SHOWZENY:
+		script_pushint(st, sd->state.showzeny);
+		return true;
+	case PDT_NOASK:
+		script_pushint(st, sd->state.noask);
+		return true;
+	case PDT_TRADING:
+		script_pushint(st, sd->state.trading);
+		return true;
+	case PDT_DEAL_LOCKED:
+		script_pushint(st, sd->state.deal_locked);
+		return true;
+	case PDT_SIZE:
+		script_pushint(st, sd->state.size);
+		return true;
+	case PDT_NIGHT:
+		script_pushint(st, sd->state.night);
+		return true;
+	case PDT_KILER:
+		script_pushint(st, sd->state.killer);
+		return true;
+	case PDT_KILLABLE:
+		script_pushint(st, sd->state.killable);
+		return true;
+	case PDT_NOKS:
+		script_pushint(st, sd->state.noks);
+		return true;
+	case PDT_AUTOLOOT:
+		script_pushint(st, sd->state.autoloot);
+		return true;
+	case PDT_NO_WEAPON_DAMAGE:
+		script_pushint(st, sd->special_state.no_weapon_damage);
+		return true;
+	case PDT_NO_MAGIC_DAMAGE:
+		script_pushint(st, sd->special_state.no_magic_damage);
+		return true;
+	case PDT_NO_MISC_DAMAGE:
+		script_pushint(st, sd->special_state.no_misc_damage);
+		return true;
+	case PDT_RESTART_FULL_RECOVER:
+		script_pushint(st, sd->special_state.restart_full_recover);
+		return true;
+	case PDT_NO_CASTCANCEL:
+		script_pushint(st, sd->special_state.no_castcancel);
+		return true;
+	case PDT_NO_CASTCANCEL2:
+		script_pushint(st, sd->special_state.no_castcancel2);
+		return true;
+	case PDT_NO_SIZEFIX:
+		script_pushint(st, sd->special_state.no_sizefix);
+		return true;
+	case PDT_NO_GEMSTONE:
+		script_pushint(st, sd->special_state.no_gemstone);
+		return true;
+	case PDT_INTRAVISION:
+		script_pushint(st, sd->special_state.intravision);
+		return true;
+	case PDT_PERFECT_HIDING:
+		script_pushint(st, sd->special_state.perfect_hiding);
+		return true;
+	case PDT_NO_KNOCKBACK:
+		script_pushint(st, sd->special_state.no_knockback);
+		return true;
+	case PDT_BONUS_COMA:
+		script_pushint(st, sd->state.bonus_coma);
+		return true;
+	case PDT_HEAD_DIR:
+		script_pushint(st, sd->state.head_dir);
+		return true;
+	case PDT_NPC_TIMER_ID:
+		script_pushint(st, sd->npc_timer_id);
+		return true;
+	case PDT_CHAT_ID:
+		script_pushint(st, sd->chat_id);
+		return true;
+	case PDT_IDLETIME:
+		script_pushint(st, sd->idletime);
+		return true;
+	case PDT_FOLLOWTARGET:
+		script_pushint(st, sd->followtarget);
+		return true;
+	case PDT_EMOTIONLASTTIME:
+		script_pushint(st, sd->emotionlasttime);
+		return true;
+	case PDT_INVINCIBLE_TIMER:
+		script_pushint(st, sd->invincible_timer);
+		return true;
+	case PDT_CANLOG_TICK:
+		script_pushint(st, sd->canlog_tick);
+		return true;
+	case PDT_CANUSEITEM_TICK:
+		script_pushint(st, sd->canuseitem_tick);
+		return true;
+	case PDT_CANUSECASHFOOD_TICK:
+		script_pushint(st, sd->canusecashfood_tick);
+		return true;
+	case PDT_CANEQUIP_TICK:
+		script_pushint(st, sd->canequip_tick);
+		return true;
+	case PDT_CANTALK_TICK:
+		script_pushint(st, sd->cantalk_tick);
+		return true;
+	case PDT_CANSKILL_TICK:
+		script_pushint(st, sd->canskill_tick);
+		return true;
+	case PDT_CANSENDMAIL_TICK:
+		script_pushint(st, sd->cansendmail_tick);
+		return true;
+	case PDT_KS_FLOODPROTECT_KICK:
+		script_pushint(st, sd->ks_floodprotect_tick);
+		return true;
+	case PDT_DISGUISE:
+		script_pushint(st, sd->disguise);
+		return true;
+	case PDT_POTION_SUCCESS_COUNTER:
+		script_pushint(st, sd->potion_success_counter);
+		return true;
+	case PDT_MISSION_COUNT:
+		script_pushint(st, sd->mission_count);
+		return true;
+	case PDT_MISSION_MOBID:
+		script_pushint(st, sd->mission_mobid);
+		return true;
+	case PDT_DIE_COUNTER:
+		script_pushint(st, sd->die_counter);
+		return true;
+	case PDT_DEVOTION:
+		script_pushint(st, sd->devotion[MAX_PC_DEVOTION]);//TODO
+		return true;
+	case PDT_TRADE_PARTNER:
+		script_pushint(st, sd->trade_partner);
+		return true;
+	case PDT_GUILDSPY:
+		script_pushint(st, sd->guildspy);
+		return true;
+	case PDT_PARTYSPY:
+		script_pushint(st, sd->partyspy);
+		return true;
+	case PDT_HATE_MOB:
+		script_pushint(st, sd->hate_mob[MAX_PC_FEELHATE]);//TODO
+		return true;
+	case PDT_PVP_TIMER:
+		script_pushint(st, sd->pvp_timer);
+		return true;
+	case PDT_PVP_POINT:
+		script_pushint(st, sd->pvp_point);
+		return true;
+	case PDT_PVP_RANK:
+		script_pushint(st, sd->pvp_rank);
+		return true;
+	case PDT_PVP_LASTUSERS:
+		script_pushint(st, sd->pvp_lastusers);
+		return true;
+	case PDT_PVP_WON:
+		script_pushint(st, sd->pvp_won);
+		return true;
+	case PDT_PVP_LOST:
+		script_pushint(st, sd->pvp_lost);
+		return true;
+	case PDT_EVENTCOUNT:
+		script_pushint(st, sd->eventcount);
+		return true;
+	case PDT_FAKENAME:
+		script_pushint(st, sd->fakename[0]);//TODO: CHAR
+		return true;
+	case PDT_DUEL_GROUP:
+		script_pushint(st, sd->duel_group);
+		return true;
+	case PDT_DUEL_INVITE:
+		script_pushint(st, sd->duel_invite);
+		return true;
+	case PDT_CASHPOINTS:
+		script_pushint(st, sd->cashPoints);
+		return true;
+	case PDT_KAFRAPOINTS:
+		script_pushint(st, sd->kafraPoints);
+		return true;
+	case PDT_RENTAL_TIMER:
+		script_pushint(st, sd->rental_timer);
+		return true;
+	case PDT_NPC_IDLE_TIMER:
+		script_pushint(st, sd->npc_idle_timer);
+		return true;
+	case PDT_NPC_IDLE_TICK:
+		script_pushint(st, sd->npc_idle_tick);
+		return true;
+	case PDT_FRIEND_REQ:
+		script_pushint(st, sd->friend_req);
+		return true;
+	case PDT_FONTCOLOR:
+		script_pushint(st, sd->fontcolor);//TODO: CHAR
+		return true;
+	default:
+		ShowError("buildin_read_player_data: Invalid player data type %d provided.\n", type);
+		script_pushint(st, 0);
+		return false;
+	}
+}
+
 BUILDIN(searchitem)
 {
 	struct script_data* data = script_getdata(st, 2);
