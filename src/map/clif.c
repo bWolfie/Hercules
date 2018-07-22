@@ -4367,6 +4367,18 @@ void clif_getareachar_unit(struct map_session_data* sd,struct block_list *bl) {
 	if (vd == NULL || vd->class == INVISIBLE_CLASS)
 		return;
 
+	// @hidepet [Wolfie]
+	if (bl->type == BL_PET) {
+		struct pet_data *pd = BL_UCAST(BL_PET, bl);
+		if (pd != NULL) {
+			if (sd->state.hidepet == 2)
+				return;
+			else if (sd->state.hidepet == 1 && pd != sd->pd)
+				return; // only hide if not own pet
+		}
+	}
+	// End @hidepet [Wolfie]
+
 	if (bl->type == BL_NPC) {
 		// Hide NPC from maya purple card.
 		struct npc_data *nd = BL_UCAST(BL_NPC, bl);

@@ -9640,6 +9640,35 @@ ACMD(reloadclans)
 }
 
 /**
+ * @hidepet [Wolfie]
+ **/
+ACMD(hidepet)
+{
+	int val = atoi(message);
+	if (!*message || val > 2 || val < 0) {
+		clif->message(fd, "Usage: @hidepet <0-2>");
+		clif->message(fd, "0: Show all pets.");
+		clif->message(fd, "1: Hide all pets but your own.");
+		clif->message(fd, "2: Hide all pets.");
+		return false;
+	}
+
+	sd->state.hidepet = val;
+	clif->refresh(sd);
+
+	if (val == 0)
+		sprintf(atcmd_output, "You will now see all pets.");
+	else if (val == 1)
+		sprintf(atcmd_output, "You won't see any pets, except your own.");
+	else if (val == 2)
+		sprintf(atcmd_output, "You won't see any pets.");
+
+	clif->message(fd, atcmd_output);
+
+	return true;
+}
+
+/**
  * Fills the reference of available commands in atcommand DBMap
  **/
 #define ACMD_DEF(x) { #x, atcommand_ ## x, NULL, NULL, NULL, true }
@@ -9917,6 +9946,7 @@ void atcommand_basecommands(void) {
 		ACMD_DEF(joinclan),
 		ACMD_DEF(leaveclan),
 		ACMD_DEF(reloadclans),
+		ACMD_DEF(hidepet), // @hidepet [Wolfie]
 	};
 	int i;
 
