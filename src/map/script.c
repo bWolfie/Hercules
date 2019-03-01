@@ -14800,25 +14800,32 @@ static BUILDIN(getinventorylist)
 {
 	struct map_session_data *sd = script->rid2sd(st);
 	char card_var[SCRIPT_VARNAME_LENGTH];
+	const char *command = script->getfuncname(st);
 
-	int j=0,k;
-	if(!sd) return true;
+	if (sd == NULL)
+		return true;
 
-	for (int i = 0;i < sd->status.inventorySize; i++) {
-		if(sd->status.inventory[i].nameid > 0 && sd->status.inventory[i].amount > 0) {
-			pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_id"), j),sd->status.inventory[i].nameid);
-			pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_amount"), j),sd->status.inventory[i].amount);
-			if(sd->status.inventory[i].equip) {
-				pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_equip"), j),pc->equippoint(sd,i));
+	int j = 0, k, last = 0, type = 0;
+
+	// getinventorylistindex()
+	if (strncmp(get_buildin_name(st), "getinventorylistindex", 21) == 0) {
+		type = 1;
+
+	for (int i = 0; i < sd->status.inventorySize; i++) {
+		if (sd->status.inventory[i].nameid > 0 && sd->status.inventory[i].amount > 0) {
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_id"), j), sd->status.inventory[i].nameid);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_amount"), j), sd->status.inventory[i].amount);
+			if (sd->status.inventory[i].equip) {
+				pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_equip"), j), pc->equippoint(sd, i));
 			} else {
-				pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_equip"), j),0);
+				pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_equip"), j), 0);
 			}
-			pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_refine"), j),sd->status.inventory[i].refine);
-			pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_identify"), j),sd->status.inventory[i].identify);
-			pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_attribute"), j),sd->status.inventory[i].attribute);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_refine"), j), sd->status.inventory[i].refine);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_identify"), j), sd->status.inventory[i].identify);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_attribute"), j), sd->status.inventory[i].attribute);
 			for (k = 0; k < MAX_SLOTS; k++) {
-				sprintf(card_var, "@inventorylist_card%d",k+1);
-				pc->setreg(sd,reference_uid(script->add_variable(card_var), j),sd->status.inventory[i].card[k]);
+				sprintf(card_var, "@inventorylist_card%d", k + 1);
+				pc->setreg(sd, reference_uid(script->add_variable(card_var), j), sd->status.inventory[i].card[k]);
 			}
 			for (k = 0; k < MAX_ITEM_OPTIONS; k++) {
 				sprintf(card_var, "@inventorylist_opt_id%d", k + 1);
@@ -14828,12 +14835,41 @@ static BUILDIN(getinventorylist)
 				sprintf(card_var, "@inventorylist_opt_param%d", k + 1);
 				pc->setreg(sd, reference_uid(script->add_variable(card_var), j), sd->status.inventory[i].option[k].param);
 			}
-			pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_expire"), j),sd->status.inventory[i].expire_time);
-			pc->setreg(sd,reference_uid(script->add_variable("@inventorylist_bound"), j),sd->status.inventory[i].bound);
-			j++;
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_expire"), j), sd->status.inventory[i].expire_time);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_bound"), j), sd->status.inventory[i].bound);
+
+			last = i + 1;
+
+			if (type != 1)
+				j++;
+		} else if (type == 1) {
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_id"), j), -1);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_amount"), j), -1);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_equip"), j), -1);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_refine"), j), -1);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_identify"), j), -1);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_attribute"), j), -1);
+			for (k = 0; k < MAX_SLOTS; k++) {
+				sprintf(card_var, "@inventorylist_card%d", k + 1);
+				pc->setreg(sd, reference_uid(script->add_variable(card_var), j), -1);
+			}
+			for (k = 0; k < MAX_ITEM_OPTIONS; k++) {
+				sprintf(card_var, "@inventorylist_opt_id%d", k + 1);
+				pc->setreg(sd, reference_uid(script->add_variable(card_var), j), -1);
+				sprintf(card_var, "@inventorylist_opt_val%d", k + 1);
+				pc->setreg(sd, reference_uid(script->add_variable(card_var), j), -1);
+				sprintf(card_var, "@inventorylist_opt_param%d", k + 1);
+				pc->setreg(sd, reference_uid(script->add_variable(card_var), j), -1);
+			}
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_expire"), j), -1);
+			pc->setreg(sd, reference_uid(script->add_variable("@inventorylist_bound"), j), -1);
 		}
+
+		if (type == 1)
+			j++;
 	}
-	pc->setreg(sd,script->add_variable("@inventorylist_count"),j);
+
+	pc->setreg(sd, script->add_variable("@inventorylist_count"), last);
 	return true;
 }
 
@@ -25427,7 +25463,8 @@ static void script_parse_builtin(void)
 		BUILDIN_DEF(getitemslots,"i"),
 		BUILDIN_DEF(makepet,"i"),
 		BUILDIN_DEF(getexp,"ii"),
-		BUILDIN_DEF(getinventorylist,""),
+		BUILDIN_DEF(getinventorylist, ""),
+		BUILDIN_DEF2(getinventorylist, "getinventorylistindex", ""),
 		BUILDIN_DEF(getcartinventorylist,""),
 		BUILDIN_DEF(getskilllist,""),
 		BUILDIN_DEF(clearitem,""),

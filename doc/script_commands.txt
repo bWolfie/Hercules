@@ -3143,6 +3143,29 @@ runs of getinventorylist().
 
 ---------------------------------------
 
+*getinventorylistindex()
+
+getinventorylistindex() is similar to getinventorylist(), but it does not
+skip over blank inventory indexes. Instead, all the values for that index
+are set to -1. This is useful when you need to find the absolute item index.
+
+The other difference is @inventorylist_count will be set to the highest
+valid item index.
+
+Example:
+
+//	This will display a list of inventory items in the player's chat
+//	If no item was found at the index, the player will be informed
+	getinventorylistindex()
+	for (.@i = 0; .@i < @inventorylist_count; .@i++) {
+		if (@inventorylist_id[.@i] == -1)
+			dispbottom(sprintf("Item Index %d is invalid!", .@i));
+		else
+			dispbottom(sprintf("Item ID at Item Index %d is %d", .@i, @inventorylist_id[.@i]));
+	}
+
+---------------------------------------
+
 *getcartinventorylist()
 
 This command sets a bunch of arrays with a complete list of whatever the
