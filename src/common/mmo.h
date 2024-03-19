@@ -210,7 +210,7 @@
 //Max number of characters per account. Note that changing this setting alone is not enough if the client is not hexed to support more characters as well.
 #if PACKETVER >= 20100413
 #ifndef MAX_CHARS
-	#define MAX_CHARS 12
+	#define MAX_CHARS 21
 #endif
 #else
 #ifndef MAX_CHARS
@@ -236,7 +236,7 @@
 #endif
 
 #ifndef MAX_LEVEL
-#define MAX_LEVEL 175
+#define MAX_LEVEL 500
 #endif
 #ifndef MAX_FAME
 #define MAX_FAME 1000000000
@@ -285,7 +285,7 @@
 #define MAX_PARTY 12
 #endif
 #ifndef BASE_GUILD_SIZE
-#define BASE_GUILD_SIZE 16               // Base guild members (without GD_EXTENSION)
+#define BASE_GUILD_SIZE 32               // Base guild members (without GD_EXTENSION)
 #endif
 #ifndef MAX_GUILD
 #define MAX_GUILD (BASE_GUILD_SIZE+10*6) // Increased max guild members +6 per 1 extension levels [Lupus]
@@ -344,7 +344,7 @@ STATIC_ASSERT(MAX_ACHIEVEMENT_RANKS <= 255, "This value is limited by the client
 #define MAP_NAME_LENGTH_EXT (MAP_NAME_LENGTH + 4)
 
 #ifndef MAX_FRIENDS
-#define MAX_FRIENDS 40
+#define MAX_FRIENDS 80
 #endif
 #define MAX_MEMOPOINTS 3
 
