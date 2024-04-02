@@ -31,7 +31,7 @@
  * - When disabled damage depends on gears target is wearing, not caster. (old/eathena)
  * @values 1 (enabled) or 0 (disabled)
  **/
-// #define MAGIC_REFLECTION_TYPE 1
+#define MAGIC_REFLECTION_TYPE 0
 
 /**
  * Spirit Sphere Limitation
